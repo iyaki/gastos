@@ -1,8 +1,10 @@
-package cuenta
+package domain
 
 import (
 	"testing"
 	"time"
+
+	"github.com/iyaki/gastos/helpers"
 )
 
 func TestDepositar(t *testing.T) {
@@ -14,15 +16,15 @@ func TestDepositar(t *testing.T) {
 
 		err := cuenta.Depositar(cantidadADepositar, hoy)
 
-		assertNoError(t, err)
+		helpers.AssertNoError(t, err)
 
 		balance := cuenta.Balance()
-		assertEquals(t, cantidadADepositar, balance)
+		helpers.AssertEquals(t, cantidadADepositar, balance)
 
 		movimientos := cuenta.movimientos
-		assertEquals(t, 1, len(movimientos))
-		assertEquals(t, cantidadADepositar, movimientos[0].cantidad)
-		assertEquals(t, hoy, movimientos[0].fecha)
+		helpers.AssertEquals(t, 1, len(movimientos))
+		helpers.AssertEquals(t, cantidadADepositar, movimientos[0].cantidad)
+		helpers.AssertEquals(t, hoy, movimientos[0].fecha)
 	})
 
 	t.Run("Valores negativos", func(t *testing.T) {
@@ -30,13 +32,13 @@ func TestDepositar(t *testing.T) {
 
 		err := cuenta.Depositar(-10.0, time.Now())
 
-		assertError(t, ErrValorNoPositivo, err)
+		helpers.AssertError(t, ErrValorNoPositivo, err)
 
 		balance := cuenta.Balance()
-		assertEquals(t, 0.0, balance)
+		helpers.AssertEquals(t, 0.0, balance)
 
 		movimientos := cuenta.movimientos
-		assertEquals(t, 0, len(movimientos))
+		helpers.AssertEquals(t, 0, len(movimientos))
 	})
 
 	t.Run("Valor cero", func(t *testing.T) {
@@ -44,13 +46,13 @@ func TestDepositar(t *testing.T) {
 
 		err := cuenta.Depositar(0, time.Now())
 
-		assertError(t, ErrValorNoPositivo, err)
+		helpers.AssertError(t, ErrValorNoPositivo, err)
 
 		balance := cuenta.Balance()
-		assertEquals(t, 0.0, balance)
+		helpers.AssertEquals(t, 0.0, balance)
 
 		movimientos := cuenta.movimientos
-		assertEquals(t, 0, len(movimientos))
+		helpers.AssertEquals(t, 0, len(movimientos))
 	})
 }
 
@@ -63,12 +65,12 @@ func TestRetirar(t *testing.T) {
 
 	balance := cuenta.Balance()
 	expected := -5.0
-	assertEquals(t, expected, balance)
+	helpers.AssertEquals(t, expected, balance)
 
 	movimientos := cuenta.movimientos
-	assertEquals(t, 1, len(movimientos))
-	assertEquals(t, expected, movimientos[0].cantidad)
-	assertEquals(t, hoy, movimientos[0].fecha)
+	helpers.AssertEquals(t, 1, len(movimientos))
+	helpers.AssertEquals(t, expected, movimientos[0].cantidad)
+	helpers.AssertEquals(t, hoy, movimientos[0].fecha)
 
 	t.Run("Camino feliz", func(t *testing.T) {
 		cuenta := Cuenta{}
@@ -77,16 +79,16 @@ func TestRetirar(t *testing.T) {
 
 		err := cuenta.Retirar(5, hoy)
 
-		assertNoError(t, err)
+		helpers.AssertNoError(t, err)
 
 		balance := cuenta.Balance()
 		expected := -5.0
-		assertEquals(t, expected, balance)
+		helpers.AssertEquals(t, expected, balance)
 
 		movimientos := cuenta.movimientos
-		assertEquals(t, 1, len(movimientos))
-		assertEquals(t, expected, movimientos[0].cantidad)
-		assertEquals(t, hoy, movimientos[0].fecha)
+		helpers.AssertEquals(t, 1, len(movimientos))
+		helpers.AssertEquals(t, expected, movimientos[0].cantidad)
+		helpers.AssertEquals(t, hoy, movimientos[0].fecha)
 	})
 
 	t.Run("Valores negativos", func(t *testing.T) {
@@ -94,13 +96,13 @@ func TestRetirar(t *testing.T) {
 
 		err := cuenta.Retirar(-10.0, time.Now())
 
-		assertError(t, ErrValorNoPositivo, err)
+		helpers.AssertError(t, ErrValorNoPositivo, err)
 
 		balance := cuenta.Balance()
-		assertEquals(t, 0.0, balance)
+		helpers.AssertEquals(t, 0.0, balance)
 
 		movimientos := cuenta.movimientos
-		assertEquals(t, 0, len(movimientos))
+		helpers.AssertEquals(t, 0, len(movimientos))
 	})
 
 	t.Run("Valor cero", func(t *testing.T) {
@@ -108,13 +110,13 @@ func TestRetirar(t *testing.T) {
 
 		err := cuenta.Retirar(0, time.Now())
 
-		assertError(t, ErrValorNoPositivo, err)
+		helpers.AssertError(t, ErrValorNoPositivo, err)
 
 		balance := cuenta.Balance()
-		assertEquals(t, 0.0, balance)
+		helpers.AssertEquals(t, 0.0, balance)
 
 		movimientos := cuenta.movimientos
-		assertEquals(t, 0, len(movimientos))
+		helpers.AssertEquals(t, 0, len(movimientos))
 	})
 }
 
@@ -128,33 +130,5 @@ func TestBalance(t *testing.T) {
 	cuenta.Depositar(5.99, time.Now())
 	cuenta.Retirar(2.0, time.Now())
 
-	assertEquals(t, 43.74, cuenta.Balance())
-}
-
-func assertEquals(t *testing.T, expected, got interface{}) {
-	t.Helper()
-
-	if expected != got {
-		t.Errorf("expected %v got %v", expected, got)
-	}
-}
-
-func assertNoError(t *testing.T, got error) {
-	t.Helper()
-
-	if got != nil {
-		t.Errorf("error not expected but %v", got)
-	}
-}
-
-func assertError(t *testing.T, expected, got error) {
-	t.Helper()
-
-	if got == nil {
-		t.Errorf("an error was expected but none given")
-	}
-
-	if expected != got {
-		t.Errorf("expected %v got %v", expected, got)
-	}
+	helpers.AssertEquals(t, 43.74, cuenta.Balance())
 }
