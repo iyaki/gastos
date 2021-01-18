@@ -17,8 +17,8 @@ func (c *CuentaRepositoryInMemory) Agregar(cuenta domain.Cuenta) (domain.Cuenta,
 	}
 
 	c.cuentas = append(c.cuentas, cuenta)
-	c.cuentas[len(c.cuentas) - 1].ID = len(c.cuentas)
-	return c.cuentas[len(c.cuentas) - 1], nil
+	c.cuentas[len(c.cuentas)-1].ID = len(c.cuentas)
+	return c.cuentas[len(c.cuentas)-1], nil
 }
 
 // Actualizar actualizar y devuelve una cuenta del repositorio o una cuenta vacia en caso de
@@ -47,8 +47,8 @@ func (c *CuentaRepositoryInMemory) Eliminar(cuentaID int) (domain.Cuenta, error)
 
 	for i, cuentaAlmacenada := range c.cuentas {
 		if cuentaAlmacenada.ID == cuentaID {
-			c.cuentas[i] = c.cuentas[len(c.cuentas) - 1]
-			c.cuentas = c.cuentas[:len(c.cuentas) - 1]
+			c.cuentas[i] = c.cuentas[len(c.cuentas)-1]
+			c.cuentas = c.cuentas[:len(c.cuentas)-1]
 			return cuentaAlmacenada, nil
 		}
 	}

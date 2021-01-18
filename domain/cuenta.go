@@ -10,9 +10,9 @@ var ErrValorNoPositivo = errors.New("No es posible operar con valores no positiv
 
 // Cuenta representa una cuenta en la que depositar y retirar dinero
 type Cuenta struct {
-	ID int
-	Nombre string
-	balance float64
+	ID          int
+	Nombre      string
+	balance     float64
 	movimientos []movimiento
 }
 
@@ -55,7 +55,7 @@ func (c *Cuenta) Balance() float64 {
 
 type movimiento struct {
 	cantidad float64
-	fecha time.Time
+	fecha    time.Time
 }
 
 // CuentaRepository es la interfaz de los repositorios de cuenta.

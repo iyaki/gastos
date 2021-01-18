@@ -176,7 +176,7 @@ func TestObtenerTodas(t *testing.T) {
 	t.Run("Camino feliz", func(t *testing.T) {
 		repository := CuentaRepositoryInMemory{}
 
-		cuenta1, _ :=repository.Agregar(domain.Cuenta{Nombre: "Primera Cuenta"})
+		cuenta1, _ := repository.Agregar(domain.Cuenta{Nombre: "Primera Cuenta"})
 		cuenta2, _ := repository.Agregar(domain.Cuenta{Nombre: "Segunda Cuenta"})
 		cuenta3, _ := repository.Agregar(domain.Cuenta{Nombre: "Tercera Cuenta"})
 
