@@ -17,14 +17,14 @@ func (c *CuentaRepositoryInMemory) Agregar(cuenta domain.Cuenta) (domain.Cuenta,
 	}
 
 	c.cuentas = append(c.cuentas, cuenta)
-	c.cuentas[len(c.cuentas)-1].ID = len(c.cuentas)
+	c.cuentas[len(c.cuentas)-1].ID = domain.CuentaID(len(c.cuentas))
 	return c.cuentas[len(c.cuentas)-1], nil
 }
 
 // Actualizar actualizar y devuelve una cuenta del repositorio o una cuenta vacia en caso de
 // que no existiera una con el ID solicitado
 func (c *CuentaRepositoryInMemory) Actualizar(cuenta domain.Cuenta) (domain.Cuenta, error) {
-	if cuenta.ID <= 0 {
+	if cuenta.ID == 0 {
 		return domain.Cuenta{}, domain.ErrCuentaIDInvalido
 	}
 
@@ -40,8 +40,8 @@ func (c *CuentaRepositoryInMemory) Actualizar(cuenta domain.Cuenta) (domain.Cuen
 
 // Eliminar elimina y devuelve una cuenta del repositorio o una cuenta vacia en caso de
 // que no existiera una con el ID solicitado
-func (c *CuentaRepositoryInMemory) Eliminar(cuentaID int) (domain.Cuenta, error) {
-	if cuentaID <= 0 {
+func (c *CuentaRepositoryInMemory) Eliminar(cuentaID domain.CuentaID) (domain.Cuenta, error) {
+	if cuentaID == 0 {
 		return domain.Cuenta{}, domain.ErrCuentaIDInvalido
 	}
 
@@ -58,8 +58,8 @@ func (c *CuentaRepositoryInMemory) Eliminar(cuentaID int) (domain.Cuenta, error)
 
 // Obtener devuelve una cuenta del repositorio o una cuenta vacia en caso de
 // que no existiera una con el ID solicitado
-func (c *CuentaRepositoryInMemory) Obtener(cuentaID int) (domain.Cuenta, error) {
-	if cuentaID <= 0 {
+func (c *CuentaRepositoryInMemory) Obtener(cuentaID domain.CuentaID) (domain.Cuenta, error) {
+	if cuentaID == 0 {
 		return domain.Cuenta{}, domain.ErrCuentaIDInvalido
 	}
 

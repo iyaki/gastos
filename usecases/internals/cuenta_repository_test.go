@@ -116,18 +116,6 @@ func TestActualizar(t *testing.T) {
 		helpers.AssertEquals(t, 0, len(repository.cuentas))
 		helpers.AssertDeepEquals(t, domain.Cuenta{}, cuenta)
 	})
-
-	t.Run("Cuenta con ID negativo", func(t *testing.T) {
-		repository := CuentaRepositoryInMemory{}
-		cuenta := domain.Cuenta{}
-		cuenta.ID = -3
-
-		cuentaActualizada, err := repository.Actualizar(cuenta)
-
-		helpers.AssertError(t, domain.ErrCuentaIDInvalido, err)
-		helpers.AssertEquals(t, 0, len(repository.cuentas))
-		helpers.AssertDeepEquals(t, domain.Cuenta{}, cuentaActualizada)
-	})
 }
 
 func TestObtener(t *testing.T) {
@@ -157,15 +145,6 @@ func TestObtener(t *testing.T) {
 		repository := CuentaRepositoryInMemory{}
 
 		cuentaObtenida, err := repository.Obtener(0)
-
-		helpers.AssertError(t, domain.ErrCuentaIDInvalido, err)
-		helpers.AssertDeepEquals(t, domain.Cuenta{}, cuentaObtenida)
-	})
-
-	t.Run("ID negativo", func(t *testing.T) {
-		repository := CuentaRepositoryInMemory{}
-
-		cuentaObtenida, err := repository.Obtener(-7)
 
 		helpers.AssertError(t, domain.ErrCuentaIDInvalido, err)
 		helpers.AssertDeepEquals(t, domain.Cuenta{}, cuentaObtenida)

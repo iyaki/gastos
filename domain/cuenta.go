@@ -5,16 +5,16 @@ import (
 	"time"
 )
 
-// ErrValorNoPositivo es el error devuelto al intentar operar con valores no positivos.
-var ErrValorNoPositivo = errors.New("No es posible operar con valores no positivos")
-
 // Cuenta representa una cuenta en la que depositar y retirar dinero
 type Cuenta struct {
-	ID          int
+	ID          CuentaID
 	Nombre      string
 	balance     float64
 	movimientos []movimiento
 }
+
+// ErrValorNoPositivo es el error devuelto al intentar operar con valores no positivos.
+var ErrValorNoPositivo = errors.New("No es posible operar con valores no positivos")
 
 // Depositar permite depositar una cierta cantidad de dinero en una cuenta.
 // Si se intenta invocar esta funcion con un valor no positivo como primer argumento
@@ -53,6 +53,9 @@ func (c *Cuenta) Balance() float64 {
 	return balance
 }
 
+// CuentaID representa un ID de Cuenta. Debe ser un número entero positivo
+type CuentaID uint
+
 type movimiento struct {
 	cantidad float64
 	fecha    time.Time
@@ -62,19 +65,14 @@ type movimiento struct {
 type CuentaRepository interface {
 	Agregar(cuenta Cuenta) (Cuenta, error)
 	Actualizar(cuenta Cuenta) (Cuenta, error)
-	Eliminar(cuentaID int) (Cuenta, error)
-	Obtener(cuentaID int) (Cuenta, error)
+	Eliminar(cuentaID CuentaID) (Cuenta, error)
+	Obtener(cuentaID CuentaID) (Cuenta, error)
 	ObtenerTodas() []Cuenta
 }
 
-// ErrCuentaNuevaConID es el error devuelto por el repositorio al intentar agregar
-// una cuenta con un ID repetido
-var ErrCuentaNuevaConID = errors.New("No es posible agregar al repositorio cuentas que poseen un ID distinto de cero")
-
-// ErrCuentaNoExiste es el error devuelto por el repositorio al intentar operar sobre
-// una cuenta con un ID inexistente
-var ErrCuentaNoExiste = errors.New("El ID de la cuenta que intenta eliminar o actualizar del repositorio no existe")
-
-// ErrCuentaIDInvalido es el error devuelto por el repositorio al intentar realizar
-// operaciones con un ID de cuenta menor o igual 0
-var ErrCuentaIDInvalido = errors.New("El ID de la cuenta debe ser mayor a cero")
+// Errores relacionados a CuentaRepository
+var (
+	ErrCuentaNuevaConID = errors.New("No es posible agregar al repositorio cuentas que poseen un ID distinto de cero")
+	ErrCuentaNoExiste   = errors.New("El ID de la cuenta que intenta eliminar o actualizar del repositorio no existe")
+	ErrCuentaIDInvalido = errors.New("El ID de la cuenta debe ser mayor a cero")
+)
